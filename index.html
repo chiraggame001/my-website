@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Study Helper - Free CGPA Calculator</title>
+
+  <meta
+    name="description"
+    content="Study Helper - Free online CGPA Calculator. Calculate your semester CGPA, overall CGPA and percentage easily."
+  >
+
+  <meta
+    name="keywords"
+    content="Study Helper, CGPA calculator, GPA calculator, CGPA to percentage, semester CGPA calculator, student calculator"
+  >
+
+  <meta name="author" content="Study Helper">
+
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --green: #22c55e;
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+      padding: 20px;
+    }
+
+    .nav {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .dark-btn {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 55px 20px 35px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      opacity: .9;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: -20px auto 50px;
+      padding: 0 15px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+      margin-bottom: 25px;
+    }
+
+    .ad {
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+      background: #f3f4f6;
+      border: 1px dashed #d1d5db;
+      margin: 20px 0;
+      font-size: 13px;
+    }
+
+    .semester-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .semester-header h2 {
+      font-size: 22px;
+    }
+
+    .remove-semester {
+      background: #fee2e2;
+      color: #dc2626;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+
+    .subject {
+      display: grid;
+      grid-template-columns: 1.5fr .7fr .9fr 45px;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--text);
+      font-size: 15px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99,102,241,.12);
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    .remove-subject {
+      border: none;
+      background: #fee2e2;
+      color: #dc2626;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      border: none;
+      padding: 12px 18px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .green {
+      background: var(--green);
+      color: white;
+    }
+
+    .secondary {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .result {
+      display: none;
+      text-align: center;
+      background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+      border: 2px solid #86efac;
+    }
+
+    .result h2 {
+      color: #166534;
+    }
+
+    .big-number {
+      font-size: 58px;
+      font-weight: bold;
+      color: #16a34a;
+      margin: 10px 0;
+    }
+
+    .percentage {
+      font-size: 20px;
+      color: #374151;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 20px;
+    }
+
+    .info h2 {
+      margin-bottom: 12px;
+    }
+
+    .info p {
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .formula {
+      background: #eef2ff;
+      padding: 18px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+
+    details {
+      border-bottom: 1px solid var(--border);
+      padding: 15px 0;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    details p {
+      margin-top: 10px;
+      color: var(--muted);
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    body.dark {
+      --bg: #111827;
+      --card: #1f2937;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --border: #374151;
+    }
+
+    body.dark .ad {
+      background: #111827;
+      border-color: #374151;
+    }
+
+    body.dark .formula {
+      background: #312e81;
+    }
+
+    body.dark .secondary {
+      background: #374151;
+      color: white;
+    }
+
+    body.dark .result {
+      background: #052e16;
+    }
+
+    @media (max-width: 650px) {
+      .hero h1 {
+        font-size: 30px;
+      }
+
+      .hero p {
+        font-size: 15px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .subject {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .subject input:first-child {
+        grid-column: span 2;
+      }
+
+      .remove-subject {
+        height: 45px;
+      }
+
+      .stats {
+        gap: 20px;
+      }
+
+      .big-number {
+        font-size: 48px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo">
+      🎓 Study Helper
+    </div>
+
+    <button class="dark-btn" onclick="toggleDarkMode()">
+      🌙 Dark Mode
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Study Helper</h1>
+
+  <p>
+    Free tools to help students calculate, study and succeed.
+  </p>
+</section>
+
+<main class="container">
+
+  <div class="ad">
+    Advertisement
+  </div>
+
+  <div id="semesters">
+
+    <div class="card semester">
+
+      <div class="semester-header">
+        <h2>Semester 1</h2>
+
+        <button
+          class="remove-semester"
+          onclick="removeSemester(this)"
+        >
+          Remove
+        </button>
+      </div>
+
+      <div class="subjects">
+
+        <div class="subject">
+
+          <input
+            type="text"
+            placeholder="Subject name"
+          >
+
+          <input
+            type="number"
+            class="credit"
+            placeholder="Credits"
+            min="0"
+            step="0.5"
+          >
+
+          <input
+            type="number"
+            class="grade"
+            placeholder="Grade Point"
+            min="0"
+            max="10"
+            step="0.1"
+          >
+
+          <button
+            class="remove-subject"
+            onclick="removeSubject(this)"
+          >
+            ×
+          </button>
+
+        </div>
+
+        <div class="subject">
+
+          <input
+            type="text"
+            placeholder="Subject name"
+          >
+
+          <input
+            type="number"
+            class="credit"
+            placeholder="Credits"
+            min="0"
+            step="0.5"
+          >
+
+          <input
+            type="number"
+            class="grade"
+            placeholder="Grade Point"
+            min="0"
+            max="10"
+            step="0.1"
+          >
+
+          <button
+            class="remove-subject"
+            onclick="removeSubject(this)"
+          >
+            ×
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="buttons">
+
+        <button
+          class="btn secondary"
+          onclick="addSubject(this)"
+        >
+          + Add Subject
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <div class="buttons">
+
+      <button
+        class="btn primary"
+        onclick="addSemester()"
+      >
+        + Add Semester
+      </button>
+
+      <button
+        class="btn green"
+        onclick="calculateCGPA()"
+      >
+        Calculate CGPA
+      </button>
+
+      <button
+        class="btn secondary"
+        onclick="resetCalculator()"
+      >
+        Reset
+      </button>
+
+    </div>
+
+  </div>
+
+  <div id="result" class="card result">
+
+    <h2>Your Overall CGPA</h2>
+
+    <div id="cgpa" class="big-number">
+      0.00
+    </div>
+
+    <div id="percentage" class="percentage">
+      Estimated Percentage: 0%
+    </div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <strong id="totalCredits">0</strong>
+        Total Credits
+      </div>
+
+      <div class="stat">
+        <strong id="totalSubjects">0</strong>
+        Subjects
+      </div>
+
+      <div class="stat">
+        <strong id="totalSemesters">0</strong>
+        Semesters
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="ad">
+    Advertisement
+  </div>
+
+  <section class="card info">
+
+    <h2>How is CGPA calculated?</h2>
+
+    <p>
+      CGPA is calculated using the credit-weighted average
+      of your grade points.
+    </p>
+
+    <div class="formula">
+      CGPA = Σ (Credit × Grade Point) ÷ Σ Credits
+    </div>
+
+    <p>
+      For example, a subject with 4 credits and a grade
+      point of 8 contributes 32 points to the calculation.
+    </p>
+
+    <h2>CGPA to Percentage</h2>
+
+    <p>
+      This calculator shows an estimated percentage using
+      CGPA × 9.5. Your university may use a different
+      conversion formula, so always check your official
+      academic rules.
+    </p>
+
+  </section>
+
+  <section class="card info">
+
+    <h2>Frequently Asked Questions</h2>
+
+    <details>
+      <summary>What is CGPA?</summary>
+
+      <p>
+        CGPA stands for Cumulative Grade Point Average.
+        It represents your average academic performance.
+      </p>
+    </details>
+
+    <details>
+      <summary>How do I calculate CGPA?</summary>
+
+      <p>
+        Multiply each subject's grade point by its credits,
+        add the results, and divide by the total credits.
+      </p>
+    </details>
+
+    <details>
+      <summary>Can I calculate multiple semesters?</summary>
+
+      <p>
+        Yes. Click "Add Semester" and enter the subjects,
+        credits and grade points for each semester.
+      </p>
+    </details>
+
+    <details>
+      <summary>Is CGPA × 9.5 always correct?</summary>
+
+      <p>
+        No. Different universities and institutions can
+        use different conversion formulas.
+      </p>
+    </details>
+
+  </section>
+
+  <div class="ad">
+    Advertisement
+  </div>
+
+</main>
+
+<footer>
+
+  © 2026 Study Helper.
+  Free online tools for students.
+
+</footer>
+
+<script>
+
+  function addSubject(button) {
+
+    const semester = button.closest(".semester");
+
+    const subjects = semester.querySelector(".subjects");
+
+    const div = document.createElement("div");
+
+    div.className = "subject";
+
+    div.innerHTML = `
+      <input type="text" placeholder="Subject name">
+
+      <input
+        type="number"
+        class="credit"
+        placeholder="Credits"
+        min="0"
+        step="0.5"
+      >
+
+      <input
+        type="number"
+        class="grade"
+        placeholder="Grade Point"
+        min="0"
+        max="10"
+        step="0.1"
+      >
+
+      <button
+        class="remove-subject"
+        onclick="removeSubject(this)"
+      >
+        ×
+      </button>
+    `;
+
+    subjects.appendChild(div);
+  }
+
+
+  function removeSubject(button) {
+
+    const subjects =
+      button.closest(".subjects");
+
+    if (subjects.children.length > 1) {
+      button.parentElement.remove();
+    }
+  }
+
+
+  function addSemester() {
+
+    const semesters =
+      document.getElementById("semesters");
+
+    const number =
+      semesters.children.length + 1;
+
+    const card =
+      document.createElement("div");
+
+    card.className = "card semester";
+
+    card.innerHTML = `
+      <div class="semester-header">
+
+        <h2>
+          Semester ${number}
+        </h2>
+
+        <button
+          class="remove-semester"
+          onclick="removeSemester(this)"
+        >
+          Remove
+        </button>
+
+      </div>
+
+      <div class="subjects">
+
+        <div class="subject">
+
+          <input
+            type="text"
+            placeholder="Subject name"
+          >
+
+          <input
+            type="number"
+            class="credit"
+            placeholder="Credits"
+            min="0"
+            step="0.5"
+          >
+
+          <input
+            type="number"
+            class="grade"
+            placeholder="Grade Point"
+            min="0"
+            max="10"
+            step="0.1"
+          >
+
+          <button
+            class="remove-subject"
+            onclick="removeSubject(this)"
+          >
+            ×
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="buttons">
+
+        <button
+          class="btn secondary"
+          onclick="addSubject(this)"
+        >
+          + Add Subject
+        </button>
+
+      </div>
+    `;
+
+    semesters.appendChild(card);
+  }
+
+
+  function removeSemester(button) {
+
+    const semesters =
+      document.getElementById("semesters");
+
+    if (semesters.children.length > 1) {
+
+      button.closest(".semester").remove();
+
+      renameSemesters();
+    }
+  }
+
+
+  function renameSemesters() {
+
+    const semesters =
+      document.querySelectorAll(".semester");
+
+    semesters.forEach((semester, index) => {
+
+      semester.querySelector("h2").textContent =
+        `Semester ${index + 1}`;
+
+    });
+  }
+
+
+  function calculateCGPA() {
+
+    const semesters =
+      document.querySelectorAll(".semester");
+
+    let totalCredits = 0;
+    let totalPoints = 0;
+    let totalSubjects = 0;
+
+    for (const semester of semesters) {
+
+      const credits =
+        semester.querySelectorAll(".credit");
+
+      const grades =
+        semester.querySelectorAll(".grade");
+
+      for (let i = 0; i < credits.length; i++) {
+
+        const credit =
+          parseFloat(credits[i].value);
+
+        const grade =
+          parseFloat(grades[i].value);
+
+        if (isNaN(credit) || isNaN(grade)) {
+          continue;
+        }
+
+        if (
+          credit <= 0 ||
+          grade < 0 ||
+          grade > 10
+        ) {
+
+          alert(
+            "Please enter valid credits and grade points between 0 and 10."
+          );
+
+          return;
+        }
+
+        totalCredits += credit;
+
+        totalPoints += credit * grade;
+
+        totalSubjects++;
+      }
+    }
+
+    if (totalCredits === 0) {
+
+      alert(
+        "Please enter your subject details first."
+      );
+
+      return;
+    }
+
+    const cgpa =
+      totalPoints / totalCredits;
+
+    const percentage =
+      cgpa * 9.5;
+
+    document.getElementById("cgpa")
+      .textContent =
+      cgpa.toFixed(2);
+
+    document.getElementById("percentage")
+      .textContent =
+      `Estimated Percentage: ${percentage.toFixed(2)}%`;
+
+    document.getElementById("totalCredits")
+      .textContent =
+      totalCredits;
+
+    document.getElementById("totalSubjects")
+      .textContent =
+      totalSubjects;
+
+    document.getElementById("totalSemesters")
+      .textContent =
+      semesters.length;
+
+    document.getElementById("result")
+      .style.display =
+      "block";
+
+    document.getElementById("result")
+      .scrollIntoView({
+        behavior: "smooth"
+      });
+  }
+
+
+  function resetCalculator() {
+    location.reload();
+  }
+
+
+  function toggleDarkMode() {
+
+    document.body.classList.toggle("dark");
+
+    const dark =
+      document.body.classList.contains("dark");
+
+    localStorage.setItem(
+      "darkMode",
+      dark
+    );
+  }
+
+
+  if (
+    localStorage.getItem("darkMode") === "true"
+  ) {
+
+    document.body.classList.add("dark");
+
+  }
+
+</script>
+
+</body>
+</html>
